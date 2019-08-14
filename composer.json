@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Medma_Stock_Control",
+    "type": "magento-module",
+    "license": "OSL",
+    "homepage": "",
+    "description": "This extension provides an additional feature for updating the stock of the products.",
+    "authors": [
+    {
+        "name": "Medma",
+        "email": "gaurav@medma.in"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

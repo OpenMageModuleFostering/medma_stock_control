@@ -1,0 +1,14 @@
+<?php
+class Medma_Printcodes_Block_Adminhtml_Printcodes extends Mage_Adminhtml_Block_Widget_Grid_Container
+{
+  public function __construct()
+  {
+    parent::__construct();
+    $this->_controller = 'adminhtml_printcodes';
+    $this->_blockGroup = 'printcodes';
+    $this->_headerText = Mage::helper('printcodes')->__('Enter Print Code');
+    //$this->_removeButton('add'); 
+    //d($this);
+
+  }
+}
