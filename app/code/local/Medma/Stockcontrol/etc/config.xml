@@ -2,7 +2,7 @@
 <config>
     <modules>
 	    <Medma_Stockcontrol>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
     </Medma_Stockcontrol>
     </modules>
     <admin>
@@ -49,6 +49,16 @@
     </adminhtml>  
     
     <global>
+    		<events>
+			<medma_domain_authentication>
+				<observers>
+					<domain>
+						<class>Medma_Stockcontrol_Model_Authenticate</class>
+						<method>saveDomain</method>
+					</domain>
+				</observers>
+			</medma_domain_authentication>
+		</events>
 	    <models>
 		    <stockcontrol>
 			    <class>Medma_Stockcontrol_Model</class>
