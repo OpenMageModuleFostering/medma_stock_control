@@ -1,6 +1,6 @@
 <?php
 
-class Futurtek_Stockcontrol_Block_Adminhtml_Stockcontrol_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
+class Medma_Stockcontrol_Block_Adminhtml_Stockcontrol_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
 {
   protected function _prepareForm()
   {
@@ -40,16 +40,15 @@ class Futurtek_Stockcontrol_Block_Adminhtml_Stockcontrol_Edit_Form extends Mage_
 	/******************************************************************/
  	
 
-	$products_model=Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*')->load();
-
-		//print_r($products_model);exit;
+	$products_model_coll=Mage::getModel('catalog/product')->getCollection();
+	
 	$products_values= array();
 
 	$products_values[] = array(
 
-                     'label' => 'Select Product',
+		'label' => 'Select Product',
 
-                      'value' => ''
+		'value' => ''
 	);
 	$operation_values= array();
 	$operation_model=array('Stock In'=>'Stock In','Stock Out'=>'Stock Out');
@@ -67,19 +66,17 @@ class Futurtek_Stockcontrol_Block_Adminhtml_Stockcontrol_Edit_Form extends Mage_
 		 );
 	}
 
-	foreach($products_model as $key => $values)
-	{
+	foreach($products_model_coll->getData() as $key => $values):
+		$products_model = Mage::getModel('catalog/product')->load($values['entity_id']);
+
 		$products_values[] = array(
-		'label' => $values['sku'],
+		'label' => $products_model->getName(),
 		'value' => $values['entity_id']
 		);
-	}	
+	
+	endforeach;
 
- 	
-	// Most Important Line for printing the above query //
 
- 	//$collection->printlogquery(true);
-      //exit(0); 
 
     $fldInfo = $form->addFieldset('stockcontrol_info', array('legend'=> $hlp->__('Stockcontrol')));
 
@@ -93,8 +90,14 @@ class Futurtek_Stockcontrol_Block_Adminhtml_Stockcontrol_Edit_Form extends Mage_
 
 	'values'    =>$products_values,
 
-	'onchange'  => "getPresentQty('$getbase_url',this.value,'present_qty','$getPresentQty_key');"
+	'onchange'  => "getSku('$getbase_url',this.value,'sku',''), getPresentQty('$getbase_url',this.value,'present_qty','$getPresentQty_key');"
       ));
+$fldInfo->addField('sku', 'text', array(
+			'label'        => $hlp->__('sku'),
+			'name'         => 'sku',
+			'readonly' =>'true',
+			
+	));
 
 	
 	$fldInfo->addField('present_qty', 'text', array(
@@ -111,7 +114,7 @@ class Futurtek_Stockcontrol_Block_Adminhtml_Stockcontrol_Edit_Form extends Mage_
 	
       ));
 	$fldInfo->addField('added_qty', 'text', array(
-          'label'     => $hlp->__('Qty(Stock In/Out)'),
+          'label'     => $hlp->__('Qty(Qty(Stock In/Stock Out)'),
            'class'     => 'required-entry',
           'name'      => 'added_qty',
 	

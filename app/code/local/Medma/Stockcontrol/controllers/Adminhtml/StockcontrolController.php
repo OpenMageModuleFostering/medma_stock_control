@@ -48,6 +48,11 @@ class Medma_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminhtml
  
 	public function saveAction() {
  	$id= $this->getRequest()->getParam('id');
+	$user = Mage::getSingleton('admin/session');
+	$userId = $user->getUser()->getUserId();
+	$model_user= Mage::getModel('admin/user')->load($userId);
+	$addedby = $model_user['username'];
+	
 
 	    $model= Mage::getModel('stockcontrol/stockcontrol');	
 
@@ -82,7 +87,7 @@ class Medma_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminhtml
 //                 ->loadByProduct($_product)->getQty();
 // echo $stocklevel;exit;
 			try {
-
+				$data['added_by']=$addedby;
 				$model->setData($data)->setId($id);
 				$model->save();
 
@@ -119,6 +124,7 @@ class Medma_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminhtml
 		}
 		$this->_redirect('*/*/');
 	}
+
 	public function getPresentQtyAction(){
 		$product_id = $this->getRequest()->getParam('product_id');
 
@@ -129,6 +135,21 @@ class Medma_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminhtml
 
 
 		echo $stocklevel;
+	}
+
+	/*
+	   This function use for get SKU
+	*/
+	public function getSkuuAction(){
+		
+		$product_id = $this->getRequest()->getParam('product_id');
+
+		$model = Mage::getModel('catalog/product'); 
+		$_product = $model->load($product_id); 
+		$prdsku = $_product->getSku();
+
+
+		echo $prdsku;
 	}	
 	
 

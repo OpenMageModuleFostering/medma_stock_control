@@ -15,14 +15,15 @@ class Medma_Stockcontrol_Block_Adminhtml_Stockcontrol_Grid extends Mage_Adminhtm
 
  protected function _prepareCollection()
   {
-	 $collection = Mage::getModel('stockcontrol/stockcontrol')->getCollection();
-      
+	$collection = Mage::getModel('stockcontrol/stockcontrol')->getCollection();
+	$catalogTable = Mage::getSingleton('core/resource')->getTableName('catalog_product_flat_1');      
+			
 	$collection->getSelect()->join(
-                    array('pc'=>'catalog_product_flat_1'),
+                    array('pc'=>$catalogTable),
                     'main_table.product_id = pc.entity_id',
                     array('product_name'=>'pc.name'));
  	$collection->getSelect()->join(
-                    array('cisi'=>'catalog_product_flat_1'),
+                    array('cisi'=>$catalogTable),
                      'main_table.product_id = cisi.entity_id',
                      array('sku'=>'cisi.sku'));
       $this->setCollection($collection);
@@ -76,6 +77,12 @@ class Medma_Stockcontrol_Block_Adminhtml_Stockcontrol_Grid extends Mage_Adminhtm
             'header'    => Mage::helper('stockcontrol')->__('Qty(Stock In/Stock Out) Date'),
             'index'     => 'qty_added_date',
             'type' => 'text',
+            'width' => '100px',
+        ));
+	$this->addColumn('added_by', array(
+            'header' => Mage::helper('stockcontrol')->__('Added By'),
+            'index' => 'added_by',
+		'type' => 'text',
             'width' => '100px',
         ));
 

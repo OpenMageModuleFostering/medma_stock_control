@@ -15,20 +15,17 @@ class Medma_Stockcontrol_Block_Adminhtml_Stockcontrol_Grid extends Mage_Adminhtm
 
  protected function _prepareCollection()
   {
-	 $collection = Mage::getModel('stockcontrol/stockcontrol')->getCollection();
-	
-      
-// 	$collection->getSelect()->join(
-//                     array('pc'=>'catalog_product_flat_1'),
-//                     'main_table.product_id = pc.entity_id',
-//                     array('pro_name'=>'main_table.product_id'));
+	$collection = Mage::getModel('stockcontrol/stockcontrol')->getCollection();
+	$catalogTable = Mage::getSingleton('core/resource')->getTableName('catalog_product_flat_1');      
+			
+	$collection->getSelect()->join(
+                    array('pc'=>$catalogTable),
+                    'main_table.product_id = pc.entity_id',
+                    array('product_name'=>'pc.name'));
  	$collection->getSelect()->join(
-                    array('cisi'=>'catalog_product_flat_1'),
+                    array('cisi'=>$catalogTable),
                      'main_table.product_id = cisi.entity_id',
                      array('sku'=>'cisi.sku'));
-		//$collection->printLogQuery(true);
-	//print_r($collection);
-//exit;
       $this->setCollection($collection);
       return parent::_prepareCollection();
   }
@@ -40,8 +37,8 @@ class Medma_Stockcontrol_Block_Adminhtml_Stockcontrol_Grid extends Mage_Adminhtm
             'header'=> Mage::helper('stockcontrol')->__('Product Name'),
             'width' => '80px',
             'type'  => 'text',
-            'index' => 'sku'
-	
+            'index' => 'product_name',
+	'filter_index' => 'main_table.product_name'
         ));
  $this->addColumn('sku', array(
             'header'=> Mage::helper('stockcontrol')->__('Sku'),
@@ -80,6 +77,12 @@ class Medma_Stockcontrol_Block_Adminhtml_Stockcontrol_Grid extends Mage_Adminhtm
             'header'    => Mage::helper('stockcontrol')->__('Qty(Stock In/Stock Out) Date'),
             'index'     => 'qty_added_date',
             'type' => 'text',
+            'width' => '100px',
+        ));
+	$this->addColumn('operation', array(
+            'header' => Mage::helper('stockcontrol')->__('Operation'),
+            'index' => 'operation',
+		'type' => 'text',
             'width' => '100px',
         ));
 

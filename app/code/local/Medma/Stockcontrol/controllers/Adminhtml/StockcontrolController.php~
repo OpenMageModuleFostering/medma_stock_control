@@ -1,6 +1,6 @@
 <?php
 
-class Futurtek_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminhtml_Controller_action
+class Medma_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminhtml_Controller_action
 {
 	public function indexAction() {
 
@@ -48,6 +48,11 @@ class Futurtek_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminh
  
 	public function saveAction() {
  	$id= $this->getRequest()->getParam('id');
+	$user = Mage::getSingleton('admin/session');
+	$userId = $user->getUser()->getUserId();
+	$model_user= Mage::getModel('admin/user')->load($userId);
+	$addedby = $model_user['username'];
+	
 
 	    $model= Mage::getModel('stockcontrol/stockcontrol');	
 
@@ -58,6 +63,7 @@ class Futurtek_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminh
 		if($data['present_qty']<='0'){
 		Mage::getSingleton('adminhtml/session')->addError(Mage::helper('stockcontrol')->__('Quantity is less to perform Stock Out operation'));
         	$this->_redirect('*/*/');
+		return;
 		}else{
 		$total_qty=$data['present_qty']-$data['added_qty'];
 		}
@@ -66,6 +72,11 @@ class Futurtek_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminh
 		$_product = $model_product->load($data['product_id']); 
 		$stockData = $_product->getStockData();
 		$stockData['qty'] = $total_qty;
+		if($total_qty>0){
+		$stockData['is_in_stock'] = 1;
+		}else{
+		$stockData['is_in_stock'] = 0;
+		}
 		$_product->setStockData($stockData);
 		$_product->save();
 		$user = Mage::getSingleton('admin/session')->getData();
@@ -76,7 +87,7 @@ class Futurtek_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminh
 //                 ->loadByProduct($_product)->getQty();
 // echo $stocklevel;exit;
 			try {
-
+				$data['added_by']=$addedby;
 				$model->setData($data)->setId($id);
 				$model->save();
 
@@ -113,6 +124,7 @@ class Futurtek_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminh
 		}
 		$this->_redirect('*/*/');
 	}
+
 	public function getPresentQtyAction(){
 		$product_id = $this->getRequest()->getParam('product_id');
 
@@ -123,6 +135,21 @@ class Futurtek_Stockcontrol_Adminhtml_StockcontrolController extends Mage_Adminh
 
 
 		echo $stocklevel;
+	}
+
+	/*
+	   This function use for get sku
+	*/
+	public function getSkuuAction(){
+		
+		$product_id = $this->getRequest()->getParam('product_id');
+
+		$model = Mage::getModel('catalog/product'); 
+		$_product = $model->load($product_id); 
+		$prdsku = $_product->getSku();
+
+
+		echo $prdsku;
 	}	
 	
 

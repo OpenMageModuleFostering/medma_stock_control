@@ -65,18 +65,26 @@
 		    </stockcontrol_mysql4>
 		    
         	</models>
-        <resources>
-		<stockcontrol_write>
-               	 	<connection>
-                    		<use>core_write</use>
-                	</connection>
-		</stockcontrol_write>
-		<stockcontrol_read>
-                	<connection>
-                    		<use>core_read</use>
-                	</connection>
-		</stockcontrol_read>
-        </resources>
+         <resources>
+            		<stockcontrol_setup>
+                		<setup>
+                    			<module>Medma_Stockcontrol</module>
+                		</setup>
+                		<connection>
+                    			<use>core_setup</use>
+                		</connection>
+            		</stockcontrol_setup>
+            		<stockcontrol_write>
+                		<connection>
+                    			<use>core_write</use>
+                		</connection>
+            		</stockcontrol_write>
+            		<stockcontrol_read>
+                		<connection>
+                    			<use>core_read</use>
+                		</connection>
+            		</stockcontrol_read>
+        	</resources> 
         <blocks>
 		<stockcontrol>
                 	<class>Medma_Stockcontrol_Block</class>
