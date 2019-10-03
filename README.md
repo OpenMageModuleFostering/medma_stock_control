@@ -1,3 +1,5 @@
+
+
 ## Original Package Description
 
 This extension provides an additional feature for updating the stock of the products.
